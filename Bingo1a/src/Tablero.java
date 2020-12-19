@@ -46,7 +46,6 @@ public class Tablero {
 
 	public void mostrar() {
 		char ch1 = '*';
-		System.out.print("" + ch1);
 		for (int i = 0; i < DIMENX; i++) {
 			System.out.print("" + ch1 + ch1 + ch1 + ch1);
 		}
@@ -55,6 +54,9 @@ public class Tablero {
 			for (int j = 0; j < DIMENY; j++) {
 				if (!aciertos[i][j]) {
 					System.out.print("" + ch1 + this.tablero[i][j] + ch1);
+					if (this.tablero[i][j] < 10 ) {
+						System.out.print("" + ch1);
+					}
 				} else {
 					System.out.print("" + ch1 + "xx" + ch1);
 				}
@@ -62,12 +64,17 @@ public class Tablero {
 			}
 			System.out.println("" + ch1);
 		}
+		for (int i = 0; i < DIMENX; i++) {
+			System.out.print("" + ch1 + ch1 + ch1 + ch1);
+		}
+		System.out.println("" + ch1);
 	}
 
 	public void tirar() {
 		int numero;
 		boolean haAcertado = false;
 		numero = (int) (MAXBOLA * Math.random());
+		System.out.println("Ha salido el numero: " + numero);
 		for (int i = 0; i < DIMENX; i++) {
 			for (int j = 0; j < DIMENY; j++) {
 				if (numero == tablero[i][j]) {
@@ -77,7 +84,7 @@ public class Tablero {
 			}
 		}
 		if (haAcertado) {
-			System.out.println("Felicidades, ha acertado el numero " + numero);
+			System.out.println("Felicidades, ha acertado el numero");
 			System.out.println("Ha sido tachado con xx");
 		}
 		

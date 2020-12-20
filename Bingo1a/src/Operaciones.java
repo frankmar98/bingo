@@ -106,7 +106,7 @@ public class Operaciones {
 		int i = 0;
 		Tablero[] nuevaLista = new Tablero[MAX_TABS];
 		nuevaLista = anteriorLista;
-		Tablero tab = new Tablero();
+		Tablero tab = new Tablero(90,1); //bolas entre 0-90 repetidas 1 vez
 		while (anteriorLista[i] != null && i < MAX_TABS - 1) {
 			i++; //contador para insertar el nuevo tablero en esta posicion
 		}

@@ -1,16 +1,20 @@
 /**
  * Version preliminar del Bingo por Frank Martinez 1AMT B. Falta mucho.
  * Sentiros libres de tocar cosas, lo que querais.
+ * 
+ * Usuario del bingo, poco desarrollado por ahora se puede ampliar
+ * 
+ * 
  * @author fmm
  *
  */
 
 public class Usuario {
 
-	private String nombre;
-	private String id;
-	private double saldo;
-	private boolean esVetado;
+	private String nombre; //4 caracteres o mas, o error
+	private String id; //id de usuario
+	private double saldo; //pedido pero no usado por ahora
+	private boolean esVetado; //no usado por ahora
 	/**
 	 * @param nombre
 	 * @param saldo

@@ -1,19 +1,21 @@
 /**
- * Version preliminar del Bingo por Frank Martinez 1AMT B. Falta mucho.
- * Sentiros libres de tocar cosas, lo que querais.
+ * Version preliminar del Bingo por Frank Martinez 1AMT B. Falta mucho. Sentiros
+ * libres de tocar cosas, lo que querais.
+ * 
+ * Tablero, esto es un carton del bingo, con sus propiedades, logica y
+ * operaciones como rellenar
+ * 
  * @author fmm
  *
  */
-
-
 
 public class Tablero {
 	public static final int DIMENX = 5;// DIMENSIONES TABLERO
 	public static final int DIMENY = 5;// DIMENSIONES TABLERO
 	public static final int MAXBOLA = 91;// maximo numero que puede salir en la bola +1
-	private int[][] tablero = new int[DIMENX][DIMENY];
-	private boolean[][] aciertos = new boolean[DIMENX][DIMENY];
-	private String id = "0";
+	private int[][] tablero = new int[DIMENX][DIMENY]; // array de los numeros del tablero
+	private boolean[][] aciertos = new boolean[DIMENX][DIMENY]; // array de los aciertos sobre el tablero
+	private String id = "0"; //id del tablero
 
 	/**
 	 * @return the id
@@ -23,18 +25,23 @@ public class Tablero {
 	}
 
 	/**
+	 * Constructor
 	 * @param tablero
 	 */
 	public Tablero() {
 		super();
-		for (int i = 0; i < DIMENX; i++) {
+		for (int i = 0; i < DIMENX; i++) { //rellenar inicialmente tablero vacio
 			for (int j = 0; j < DIMENY; j++) {
 				this.tablero[i][j] = 0;
 				this.aciertos[i][j] = false;
 			}
 		}
-		this.id = "tab" + (int) (10000 * Math.random());
+		this.id = "tab" + (int) (10000 * Math.random()); //generar id
 	}
+	
+	/**
+	 * Rellena el tablero con numeros aleatorios
+	 */
 
 	public void rellenarAleatorio() {
 		for (int i = 0; i < DIMENX; i++) {
@@ -43,21 +50,25 @@ public class Tablero {
 			}
 		}
 	}
+	
+	/**
+	 * Muestra el tablero por consola
+	 */
 
 	public void mostrar() {
-		char ch1 = '*';
+		char ch1 = '*'; //caracter separador
 		for (int i = 0; i < DIMENX; i++) {
 			System.out.print("" + ch1 + ch1 + ch1 + ch1);
 		}
 		System.out.println("" + ch1);
 		for (int i = 0; i < DIMENX; i++) {
 			for (int j = 0; j < DIMENY; j++) {
-				if (!aciertos[i][j]) {
+				if (!aciertos[i][j]) { //numeros restantes por acertar
 					System.out.print("" + ch1 + this.tablero[i][j] + ch1);
-					if (this.tablero[i][j] < 10 ) {
+					if (this.tablero[i][j] < 10) { //numeros de una cifra no descuadran
 						System.out.print("" + ch1);
 					}
-				} else {
+				} else { //numeros ya acertados tachados
 					System.out.print("" + ch1 + "xx" + ch1);
 				}
 
@@ -69,28 +80,36 @@ public class Tablero {
 		}
 		System.out.println("" + ch1);
 	}
+	
+	/**
+	 * Tirar una bola para un tablero 
+	 */
 
 	public void tirar() {
 		int numero;
 		boolean haAcertado = false;
-		numero = (int) (MAXBOLA * Math.random());
-		System.out.println("Ha salido el numero: " + numero);
+		numero = (int) (MAXBOLA * Math.random()); //tirar bola
+		System.out.println("Ha salido el numero: " + numero); //informar de la tirada
 		for (int i = 0; i < DIMENX; i++) {
 			for (int j = 0; j < DIMENY; j++) {
 				if (numero == tablero[i][j]) {
-					aciertos[i][j] = true;
+					aciertos[i][j] = true; //actualizar matriz de aciertos
 					haAcertado = true;
 				}
 			}
 		}
-		if (haAcertado) {
+		if (haAcertado) { //informar del acierto
 			System.out.println("Felicidades, ha acertado el numero");
 			System.out.println("Ha sido tachado con xx");
 		}
-		
-		comprobarTodo();
+
+		comprobarTodo(); //comprobar lineas o bingo
 
 	}
+	
+	/**
+	 * Comprobar linea en las 2 dimensiones y bingo, informar en su caso
+	 */
 
 	public void comprobarTodo() {
 		boolean lineax, lineay, bingo;
@@ -104,10 +123,15 @@ public class Tablero {
 			System.out.println("Ha sacado linea! Felicidades!");
 		}
 		if (bingo) {
-			System.out.println("Ha sacado BINGO!! Felidades!");
+			System.out.println("Ha sacado BINGO!! Felicidades!");
 		}
 
 	}
+	
+	/**
+	 * Comprobar linea en la dimension X
+	 * @return
+	 */
 
 	public boolean comprobarLineaX() {
 		boolean esLinea = false;
@@ -125,6 +149,11 @@ public class Tablero {
 		}
 		return esLinea;
 	}
+	
+	/**
+	 * Comprobar linea en la dimension Y
+	 * @return
+	 */
 
 	public boolean comprobarLineaY() {
 		boolean esLinea = false;
@@ -142,6 +171,11 @@ public class Tablero {
 		}
 		return esLinea;
 	}
+	
+	/**
+	 * Comprobar bingo. No se sale si hay bingo, se tiene que salir el usuario.
+	 * @return
+	 */
 
 	public boolean comprobarBingo() {
 		boolean esBingo = false;

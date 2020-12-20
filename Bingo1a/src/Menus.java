@@ -1,9 +1,12 @@
 import java.util.Scanner;
 
-
 /**
- * Version preliminar del Bingo por Frank Martinez 1AMT B. Falta mucho.
- * Sentiros libres de tocar cosas, lo que querais.
+ * Version preliminar del Bingo por Frank Martinez 1AMT B. Falta mucho. Sentiros
+ * libres de tocar cosas, lo que querais.
+ * 
+ * Clase Menus. Gestiona los menus por consola y su logica, por ahora con 3
+ * niveles de menu
+ * 
  * @author fmm
  *
  */
@@ -11,9 +14,19 @@ public class Menus {
 
 	Scanner sc = new Scanner(System.in);
 
+	
+	/**
+	 * Inicializa el menu
+	 */
+	
 	public void inicializar() {
 		exeMenu();
 	}
+	
+	/**
+	 * Muestra un menu por consola dado su numero
+	 * @param nmenu
+	 */
 
 	public void mostrarMenu(int nmenu) {
 
@@ -42,6 +55,10 @@ public class Menus {
 		}
 
 	}
+	
+	/**
+	 * Gestiona la logica de los menus, por ahora con 3 niveles.
+	 */
 
 	public void exeMenu() {
 		Usuario listaUsu[] = new Usuario[Operaciones.MAX_USU];

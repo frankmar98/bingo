@@ -26,10 +26,13 @@ public class GeneradorAleatorio {
 		this.repeticiones = repeticiones; // cada numero repetido por ejemplo 1 o 2 veces
 		this.lista = new int[maximo*repeticiones+1];
 		this.haSalido = new boolean[maximo*repeticiones+1];
-		for (int i = 0; i<maximo*repeticiones; i++) { //rellenar con enteros consecutivos
-			this.lista[i]=i;
-			this.haSalido[i]=false;
+		for (int i=0; i<repeticiones; i++) {
+			for (int j = 0; j<maximo; j++) { //rellenar con enteros consecutivos
+				this.lista[i*j+j]=j;
+				this.haSalido[i*j+j]=false;
+			}
 		}
+		
 	}
 	
 	/**

@@ -117,6 +117,44 @@ public class Tablero {
 
 	}
 	
+	public void tirar(int bola) {
+		int numero;
+		boolean haAcertado = false;
+		numero = bola; //tirar bola
+		System.out.println("Ha salido el numero: " + numero); //informar de la tirada
+		for (int i = 0; i < DIMENX; i++) {
+			for (int j = 0; j < DIMENY; j++) {
+				if (numero == tablero[i][j]) {
+					aciertos[i][j] = true; //actualizar matriz de aciertos
+					haAcertado = true;
+				}
+			}
+		}
+		if (haAcertado) { //informar del acierto
+			System.out.println("Felicidades, ha acertado el numero");
+			System.out.println("Ha sido tachado con xx");
+		}
+
+		comprobarTodo(); //comprobar lineas o bingo
+		contadorTiradas++;
+		System.out.println("tirada n" + contadorTiradas);
+
+	}
+	
+	/**
+	 * @return the numeroBolasDeCadaNumero
+	 */
+	public int getNumeroBolasDeCadaNumero() {
+		return numeroBolasDeCadaNumero;
+	}
+
+	/**
+	 * @param numeroBolasDeCadaNumero the numeroBolasDeCadaNumero to set
+	 */
+	public void setNumeroBolasDeCadaNumero(int numeroBolasDeCadaNumero) {
+		this.numeroBolasDeCadaNumero = numeroBolasDeCadaNumero;
+	}
+
 	/**
 	 * Comprobar linea en las 2 dimensiones y bingo, informar en su caso
 	 */

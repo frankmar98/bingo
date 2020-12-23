@@ -157,4 +157,16 @@ public class Operaciones {
 		}
 		return posicion;
 	}
+	
+	public static void jugarConTodos(Tablero[] lista) {
+		int bola;
+		GeneradorAleatorio aleTodos = new GeneradorAleatorio(90,lista[0].getNumeroBolasDeCadaNumero());
+		bola = aleTodos.tirar();
+		for (int i = 0; i < lista.length; i++) { //busqueda secuencial
+			if (lista[i] != null) { //iterar hasta donde la lista este llena
+				lista[i].tirar(bola);
+				lista[i].mostrar();
+			}
+		}
+	}
 }

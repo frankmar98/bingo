@@ -43,7 +43,8 @@ public class Menus {
 			System.out.println("Introduzca la opcion a elegir");
 			System.out.println("1. Generar nuevo tablero");
 			System.out.println("2. Jugar con un tablero");
-			System.out.println("3. Salir");
+			System.out.println("3. Jugar con todos");
+			System.out.println("4. Salir");
 			break;
 		case 3:
 			System.out.println("A jugar!!");
@@ -102,6 +103,19 @@ public class Menus {
 									}
 								} while (op3 != 2);
 							}
+							break;
+						case 3:
+							do {
+								mostrarMenu(3);
+								op3 = sc.nextInt();
+								switch (op3) {
+								case 1:
+									Operaciones.jugarConTodos(listaTabs);
+									break;
+								default:
+									System.out.println("error interno");
+								}
+							} while (op3 != 2);
 							break;
 						default:
 							System.out.println("Error interno");

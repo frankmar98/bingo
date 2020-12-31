@@ -12,19 +12,27 @@ import java.util.Scanner;
  */
 public class Menus {
 
-	Scanner sc = new Scanner(System.in);
+	Scanner sc = new Scanner(System.in); // para seleccionar opciones en los distintos metodos
 
-	
+	Usuario listaUsu[] = new Usuario[Operaciones.MAX_USU]; // todos los usuarios
+	Tablero listaTabs[] = new Tablero[Operaciones.MAX_TABS]; // todos los tableros
+
+	int posUsu = -1; // indice ultimo usuario
+	int posTab = -1; // indice ultimo tablero
+
 	/**
 	 * Inicializa el menu
 	 */
-	
+
 	public void inicializar() {
-		exeMenu();
+		listaTabs = Operaciones.iniciarTableros();
+		listaUsu = Operaciones.inicializarUsuarios();
+		menuNivel1a();
 	}
-	
+
 	/**
 	 * Muestra un menu por consola dado su numero
+	 * 
 	 * @param nmenu
 	 */
 
@@ -42,9 +50,8 @@ public class Menus {
 			System.out.println("Bienvenido a su sesion");
 			System.out.println("Introduzca la opcion a elegir");
 			System.out.println("1. Generar nuevo tablero");
-			System.out.println("2. Jugar con un tablero");
-			System.out.println("3. Jugar con todos");
-			System.out.println("4. Salir");
+			System.out.println("2. Jugar con todos los tableros");
+			System.out.println("3. Salir");
 			break;
 		case 3:
 			System.out.println("A jugar!!");
@@ -56,78 +63,84 @@ public class Menus {
 		}
 
 	}
-	
+
 	/**
-	 * Gestiona la logica de los menus, por ahora con 3 niveles.
+	 * Menu de 1er nivel. Gestionar usuarios y login.
 	 */
 
-	public void exeMenu() {
-		Usuario listaUsu[] = new Usuario[Operaciones.MAX_USU];
-		Tablero listaTabs[] = new Tablero[Operaciones.MAX_TABS];
-		int op1, op2, op3;
-		int posUsu = -1;
-		int posTab = -1;
+	private void menuNivel1a() {
+		int op; // opcion menu
 
 		do {
 			mostrarMenu(1);
-			op1 = sc.nextInt();
-			switch (op1) {
+			op = sc.nextInt();
+			switch (op) {
 			case 1:
 				listaUsu = Operaciones.crearUsuario(listaUsu);
 				break;
 			case 2:
 				posUsu = Operaciones.iniciarSesion(listaUsu);
 				if (posUsu > -1) {
-					do {
-						mostrarMenu(2);
-						op2 = sc.nextInt();
-						switch (op2) {
-						case 1:
-							listaTabs = Operaciones.crearTablero(listaTabs);
-							break;
-						case 2:
-							posTab = Operaciones.elegirTablero(listaTabs);
-							System.out.println("Tu tablero:");
-							listaTabs[posTab].mostrar();
-							if (posTab > -1) {
-								do {
-									mostrarMenu(3);
-									op3 = sc.nextInt();
-									switch (op3) {
-									case 1:
-										listaTabs[posTab].tirar();
-										listaTabs[posTab].mostrar();
-										break;
-									default:
-										System.out.println("error interno");
-									}
-								} while (op3 != 2);
-							}
-							break;
-						case 3:
-							do {
-								mostrarMenu(3);
-								op3 = sc.nextInt();
-								switch (op3) {
-								case 1:
-									Operaciones.jugarConTodos(listaTabs);
-									break;
-								default:
-									System.out.println("error interno");
-								}
-							} while (op3 != 2);
-							break;
-						default:
-							System.out.println("Error interno");
-						}
-					} while (op2 != 3);
+					menuNivel2a();
+				} else {
+					System.out.println("No existe el usuario");
 				}
 				break;
+			case 3:
+				System.out.println("Salida satisfactoria");
+				break;
 			default:
-				System.out.println("Saliendo");
+				System.out.println("Error interno");
 			}
-		} while (op1 != 3);
 
+		} while (op != 3);
 	}
 
+	/**
+	 * Menu de 2o nivel. Gestionar tableros.
+	 */
+
+	private void menuNivel2a() {
+		int op; // opcion menu
+		do {
+			mostrarMenu(2);
+			op = sc.nextInt();
+			switch (op) {
+			case 1:
+				listaTabs = Operaciones.crearTablero(listaTabs);
+				break;
+			case 2:
+				menuNivel3a();
+				break;
+			case 3:
+				System.out.println("Saliendo");
+				break;
+			default:
+				System.out.println("Error interno");
+			}
+		} while (op != 3);
+	}
+
+	/**
+	 * Menu de 3er nivel. Jugar con un tablero
+	 */
+
+	private void menuNivel3a() {
+		int op; // opcion menu
+		do {
+			mostrarMenu(3);
+			op = sc.nextInt();
+			switch (op) {
+			case 1:
+				Operaciones.jugar(listaTabs);
+				Operaciones.mostrarTableros(listaTabs);
+				break;
+			case 2:
+				System.out.println("Saliendo");
+				break;
+			default:
+				System.out.println("Error interno");
+			}
+		} while (op != 2);
+	}
 }

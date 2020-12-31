@@ -14,39 +14,31 @@ public class Tablero {
 	public static final int DIMENY = 5;// DIMENSIONES TABLERO
 	private int[][] tablero = new int[DIMENX][DIMENY]; // array de los numeros del tablero
 	private boolean[][] aciertos = new boolean[DIMENX][DIMENY]; // array de los aciertos sobre el tablero
-	private String id = "0"; //id del tablero
+	private String id; // id del tablero
 	private int numeroBolasDeCadaNumero;
 	private int maximoBola;
 	private int contadorTiradas;
-	private GeneradorAleatorio aleBolas;
 	private GeneradorAleatorio aleTablero;
 
 	/**
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
-	}
-
-	/**
 	 * Constructor
+	 * 
 	 * @param tablero
 	 */
 	public Tablero(int maximoBola, int numeroBolasDeCadaNumero) {
 		super();
-		for (int i = 0; i < DIMENX; i++) { //rellenar inicialmente tablero vacio
+		for (int i = 0; i < DIMENX; i++) { // rellenar inicialmente tablero vacio
 			for (int j = 0; j < DIMENY; j++) {
 				this.tablero[i][j] = 0;
 				this.aciertos[i][j] = false;
 			}
 		}
-		this.numeroBolasDeCadaNumero=numeroBolasDeCadaNumero;
+		this.numeroBolasDeCadaNumero = numeroBolasDeCadaNumero;
 		this.maximoBola = maximoBola;
-		this.id = "tab" + (int) (10000 * Math.random()); //generar id
-		this.aleBolas = new GeneradorAleatorio(maximoBola,numeroBolasDeCadaNumero);
-		this.aleTablero = new GeneradorAleatorio(maximoBola,1);
+		this.id = "tab" + (int) (10000 * Math.random()); // generar id
+		this.aleTablero = new GeneradorAleatorio(maximoBola, 1);
 	}
-	
+
 	/**
 	 * Rellena el tablero con numeros aleatorios
 	 */
@@ -58,25 +50,25 @@ public class Tablero {
 			}
 		}
 	}
-	
+
 	/**
 	 * Muestra el tablero por consola
 	 */
 
 	public void mostrar() {
-		char ch1 = '*'; //caracter separador
+		char ch1 = '*'; // caracter separador
 		for (int i = 0; i < DIMENX; i++) {
 			System.out.print("" + ch1 + ch1 + ch1 + ch1);
 		}
 		System.out.println("" + ch1);
 		for (int i = 0; i < DIMENX; i++) {
 			for (int j = 0; j < DIMENY; j++) {
-				if (!aciertos[i][j]) { //numeros restantes por acertar
+				if (!aciertos[i][j]) { // numeros restantes por acertar
 					System.out.print("" + ch1 + this.tablero[i][j] + ch1);
-					if (this.tablero[i][j] < 10) { //numeros de una cifra no descuadran
+					if (this.tablero[i][j] < 10) { // numeros de una cifra no descuadran
 						System.out.print("" + ch1);
 					}
-				} else { //numeros ya acertados tachados
+				} else { // numeros ya acertados tachados
 					System.out.print("" + ch1 + "xx" + ch1);
 				}
 
@@ -88,59 +80,35 @@ public class Tablero {
 		}
 		System.out.println("" + ch1);
 	}
-	
+
 	/**
-	 * Tirar una bola para un tablero 
+	 * Actualiza bola tirada para el tablero y realiza comprobaciones
 	 */
 
-	public void tirar() {
+	public void actualizar(int bola) {
 		int numero;
 		boolean haAcertado = false;
-		numero = aleBolas.tirar(); //tirar bola
-		System.out.println("Ha salido el numero: " + numero); //informar de la tirada
+		numero = bola; // tirar bola
+		System.out.println("Ha salido el numero: " + numero); // informar de la tirada
 		for (int i = 0; i < DIMENX; i++) {
 			for (int j = 0; j < DIMENY; j++) {
 				if (numero == tablero[i][j]) {
-					aciertos[i][j] = true; //actualizar matriz de aciertos
+					aciertos[i][j] = true; // actualizar matriz de aciertos
 					haAcertado = true;
 				}
 			}
 		}
-		if (haAcertado) { //informar del acierto
+		if (haAcertado) { // informar del acierto
 			System.out.println("Felicidades, ha acertado el numero");
 			System.out.println("Ha sido tachado con xx");
 		}
 
-		comprobarTodo(); //comprobar lineas o bingo
+		comprobarTodo(); // comprobar lineas o bingo
 		contadorTiradas++;
 		System.out.println("tirada n" + contadorTiradas);
 
 	}
-	
-	public void tirar(int bola) {
-		int numero;
-		boolean haAcertado = false;
-		numero = bola; //tirar bola
-		System.out.println("Ha salido el numero: " + numero); //informar de la tirada
-		for (int i = 0; i < DIMENX; i++) {
-			for (int j = 0; j < DIMENY; j++) {
-				if (numero == tablero[i][j]) {
-					aciertos[i][j] = true; //actualizar matriz de aciertos
-					haAcertado = true;
-				}
-			}
-		}
-		if (haAcertado) { //informar del acierto
-			System.out.println("Felicidades, ha acertado el numero");
-			System.out.println("Ha sido tachado con xx");
-		}
 
-		comprobarTodo(); //comprobar lineas o bingo
-		contadorTiradas++;
-		System.out.println("tirada n" + contadorTiradas);
-
-	}
-	
 	/**
 	 * @return the numeroBolasDeCadaNumero
 	 */
@@ -165,23 +133,24 @@ public class Tablero {
 		lineay = comprobarLineaY();
 		bingo = comprobarBingo();
 		if (lineax) {
-			System.out.println("Ha sacado linea! Felicidades!");
+			System.out.println("Ha sacado linea en horizontal! Felicidades!");
 		}
 		if (lineay) {
-			System.out.println("Ha sacado linea! Felicidades!");
+			System.out.println("Ha sacado linea en vertical! Felicidades!");
 		}
 		if (bingo) {
 			System.out.println("Ha sacado BINGO!! Felicidades!");
 		}
 
 	}
-	
+
 	/**
 	 * Comprobar linea en la dimension X
+	 * 
 	 * @return
 	 */
 
-	public boolean comprobarLineaX() {
+	private boolean comprobarLineaX() {
 		boolean esLinea = false;
 		int contador = 0;
 		for (int i = 0; i < DIMENX; i++) {
@@ -191,19 +160,20 @@ public class Tablero {
 					contador++;
 				}
 			}
-		}
-		if (contador >= DIMENX) {
-			esLinea = true;
+			if (contador >= DIMENX) {
+				esLinea = true;
+			}
 		}
 		return esLinea;
 	}
-	
+
 	/**
 	 * Comprobar linea en la dimension Y
+	 * 
 	 * @return
 	 */
 
-	public boolean comprobarLineaY() {
+	private boolean comprobarLineaY() {
 		boolean esLinea = false;
 		int contador = 0;
 		for (int j = 0; j < DIMENY; j++) {
@@ -213,19 +183,20 @@ public class Tablero {
 					contador++;
 				}
 			}
-		}
-		if (contador >= DIMENY) {
-			esLinea = true;
+			if (contador >= DIMENY) {
+				esLinea = true;
+			}
 		}
 		return esLinea;
 	}
-	
+
 	/**
 	 * Comprobar bingo. No se sale si hay bingo, se tiene que salir el usuario.
+	 * 
 	 * @return
 	 */
 
-	public boolean comprobarBingo() {
+	private boolean comprobarBingo() {
 		boolean esBingo = false;
 		int contador = 0;
 		for (int i = 0; i < DIMENX; i++) {
@@ -239,6 +210,13 @@ public class Tablero {
 			esBingo = true;
 		}
 		return esBingo;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
 	}
 
 }

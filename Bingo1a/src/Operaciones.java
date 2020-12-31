@@ -18,6 +18,8 @@ public class Operaciones {
 
 	static Scanner scs = new Scanner(System.in); // para cadenas
 	static Scanner sci = new Scanner(System.in); // para numeros
+	
+	private static GeneradorAleatorio aleTodos = new GeneradorAleatorio(90, 1);
 
 	/**
 	 * Inicializa la lista de usuarios
@@ -36,15 +38,12 @@ public class Operaciones {
 	 * @param anteriorLista
 	 * @return
 	 */
-	public static Usuario[] crearUsuario(Usuario[] anteriorLista) {
+	public static Usuario[] crearUsuario(Usuario[] usuarios) {
 		String nombre;
 		int i = 0;
 		double saldoInicial;
-		Usuario[] nuevaLista;
-		nuevaLista = new Usuario[MAX_USU];
-		nuevaLista = anteriorLista;
 		Usuario usu;
-		while (anteriorLista[i] != null && i < MAX_USU - 1) {
+		while (usuarios[i] != null && i < MAX_USU - 1) {
 			i++; // contador para insertar el nuevo usuario en esta posicion
 		}
 		System.out.println("Introduce nuevo nombre");
@@ -52,9 +51,9 @@ public class Operaciones {
 		System.out.println("Introduce saldo inicial");
 		saldoInicial = sci.nextDouble();
 		usu = new Usuario(nombre, saldoInicial); // creacion usuario
-		nuevaLista[i] = usu; // insercion usuario en la lista
-		System.out.println("Usuario creado con nombre:" + usu.getNombre() + " e id: " + usu.getId());
-		return nuevaLista;
+		usuarios[i] = usu; // insercion usuario en la lista
+		System.out.println("Usuario creado con nombre: " + usu.getNombre() + " e id: " + usu.getId());
+		return usuarios;
 	}
 
 	/**
@@ -70,23 +69,22 @@ public class Operaciones {
 		String nombreUsuario;
 		System.out.println("Introduzca su nombre de usuario:");
 		nombreUsuario = scs.nextLine();
-		for (int i = 0; i < listaUsu.length; i++) { //busqueda secuencial
-			if (listaUsu[i] != null) { // iterar hasta donde la lista este llena
-				if (listaUsu[i].getNombre().equals(nombreUsuario)) {
-					esValido = true;
-					posUsu = i;
-				}
+		for (int i = 0; i < listaUsu.length; i++) { // busqueda secuencial
+			if (listaUsu[i] != null && listaUsu[i].getNombre().equals(nombreUsuario)) {
+				esValido = true;
+				posUsu = i;
 			}
 		}
-		if (!esValido) { //no existe el usuario introducido por teclado
+		if (!esValido) { // no existe el usuario introducido por teclado
 			System.out.println("Usuario no existente");
 			posUsu = -1;
 		}
 		return posUsu;
 	}
-	
+
 	/**
 	 * Inicializa la lista de tableros
+	 * 
 	 * @return
 	 */
 
@@ -95,29 +93,29 @@ public class Operaciones {
 		listaInicial = new Tablero[MAX_TABS];
 		return listaInicial;
 	}
-	
+
 	/**
 	 * Actualiza la lista de tableros insertando uno nuevo
+	 * 
 	 * @param anteriorLista
 	 * @return
 	 */
 
-	public static Tablero[] crearTablero(Tablero[] anteriorLista) {
+	public static Tablero[] crearTablero(Tablero[] tableros) {
 		int i = 0;
-		Tablero[] nuevaLista = new Tablero[MAX_TABS];
-		nuevaLista = anteriorLista;
-		Tablero tab = new Tablero(90,1); //bolas entre 0-90 repetidas 1 vez
-		while (anteriorLista[i] != null && i < MAX_TABS - 1) {
-			i++; //contador para insertar el nuevo tablero en esta posicion
+		Tablero tab = new Tablero(90, 1); // bolas entre 0-90 repetidas 1 vez
+		while (tableros[i] != null && i < MAX_TABS - 1) {
+			i++; // contador para insertar el nuevo tablero en esta posicion
 		}
 		tab.rellenarAleatorio(); // se rellena al crear
-		nuevaLista[i] = tab; //insercion del tablero en la lista
+		tableros[i] = tab; // insercion del tablero en la lista
 		System.out.println("Tablero creado con id=" + tab.getId());
-		return nuevaLista;
+		return tableros;
 	}
-	
+
 	/**
 	 * Muestra los tableros existentes y su id por consola
+	 * 
 	 * @param lista
 	 */
 
@@ -131,41 +129,17 @@ public class Operaciones {
 	}
 	
 	/**
-	 * Permite elegir un tablero introduciendo su id
-	 * @param lista
-	 * @return
+	 * Tira la misma bola para todos los tableros creados
+	 * @param tableros
 	 */
 
-	public static int elegirTablero(Tablero[] lista) {
-		int posicion = -1;
-		String tab;
-		boolean esValido = false;
-		mostrarTableros(lista); //primero los muestra
-		System.out.println("Introduzca el id del tablero a elegir: ");
-		tab = scs.nextLine(); //tablero elegido
-		for (int i = 0; i < lista.length; i++) { //busqueda secuencial
-			if (lista[i] != null) { //iterar hasta donde la lista este llena
-				if (lista[i].getId().equals(tab)) {
-					posicion = i;
-					esValido = true;
-				}
-			}
-		}
-		if (!esValido) { //no existe el tablero introducido
-			System.out.println("Tablero no existente");
-			posicion = -1;
-		}
-		return posicion;
-	}
-	
-	public static void jugarConTodos(Tablero[] lista) {
+	public static void jugar(Tablero[] tableros) {
 		int bola;
-		GeneradorAleatorio aleTodos = new GeneradorAleatorio(90,lista[0].getNumeroBolasDeCadaNumero());
-		bola = aleTodos.tirar();
-		for (int i = 0; i < lista.length; i++) { //busqueda secuencial
-			if (lista[i] != null) { //iterar hasta donde la lista este llena
-				lista[i].tirar(bola);
-				lista[i].mostrar();
+		bola = aleTodos.tirar(); // generar numero aleatorio controlando no se repita
+		for (int i = 0; i < tableros.length; i++) {
+			if (tableros[i] != null) { // iterar hasta donde la lista este llena
+				tableros[i].actualizar(bola);
+				tableros[i].mostrar();
 			}
 		}
 	}

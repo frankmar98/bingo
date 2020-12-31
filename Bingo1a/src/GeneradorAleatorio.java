@@ -12,7 +12,7 @@
 public class GeneradorAleatorio {
 	private int maximo;
 	private int repeticiones;
-	private int numeroSacado; //no getters ni setters
+	private int numeroSacado; // no getters ni setters
 	private boolean[] haSalido;
 	private int[] lista;
 
@@ -24,40 +24,32 @@ public class GeneradorAleatorio {
 		super();
 		this.maximo = maximo;
 		this.repeticiones = repeticiones; // cada numero repetido por ejemplo 1 o 2 veces
-		this.lista = new int[maximo*repeticiones+1];
-		this.haSalido = new boolean[maximo*repeticiones+1];
-		for (int i=0; i<repeticiones; i++) {
-			for (int j = 0; j<maximo; j++) { //rellenar con enteros consecutivos
-				this.lista[i*j+j]=j;
-				this.haSalido[i*j+j]=false;
+		this.lista = new int[maximo * repeticiones + 1];
+		this.haSalido = new boolean[maximo * repeticiones + 1];
+		for (int i = 0; i < repeticiones; i++) {
+			for (int j = 0; j < maximo; j++) { // rellenar con enteros consecutivos
+				this.lista[i * j + j] = j;
+				this.haSalido[i * j + j] = false;
 			}
 		}
-		
+
 	}
-	
+
 	/**
 	 * Tira y devuelve numero sacado
+	 * 
 	 * @return
 	 */
 
 	public int tirar() {
-		tirada();
-		return numeroSacado;
-		
-	}
-	
-	/**
-	 * Gestiona que no se repita la tirada
-	 */
-
-	private void tirada() {
-		int m = maximo;
+		int m = maximo + 1;
 		int num;
 		do {
 			num = (int) (Math.random() * m);
 		} while (haSalido[num]);
 		haSalido[num] = true;
 		this.numeroSacado = lista[num];
+		return this.numeroSacado;
 	}
 
 	/**

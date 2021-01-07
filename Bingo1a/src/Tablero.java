@@ -14,18 +14,20 @@ public class Tablero {
 	public static final int DIMENY = 5;// DIMENSIONES TABLERO
 	private int[][] tablero = new int[DIMENX][DIMENY]; // array de los numeros del tablero
 	private boolean[][] aciertos = new boolean[DIMENX][DIMENY]; // array de los aciertos sobre el tablero
-	private String id; // id del tablero
 	private int numeroBolasDeCadaNumero;
 	private int maximoBola;
 	private int contadorTiradas;
 	private GeneradorAleatorio aleTablero;
+	private double saldo;
+	private double apuesta;
+	private String nombre;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param tablero
 	 */
-	public Tablero(int maximoBola, int numeroBolasDeCadaNumero) {
+	public Tablero(String nombre, double saldo, double apuesta, int maximoBola, int numeroBolasDeCadaNumero) {
 		super();
 		for (int i = 0; i < DIMENX; i++) { // rellenar inicialmente tablero vacio
 			for (int j = 0; j < DIMENY; j++) {
@@ -35,7 +37,9 @@ public class Tablero {
 		}
 		this.numeroBolasDeCadaNumero = numeroBolasDeCadaNumero;
 		this.maximoBola = maximoBola;
-		this.id = "tab" + (int) (10000 * Math.random()); // generar id
+		this.saldo = saldo;
+		this.apuesta = apuesta;
+		this.nombre = nombre;
 		this.aleTablero = new GeneradorAleatorio(maximoBola, 1);
 	}
 
@@ -55,41 +59,44 @@ public class Tablero {
 	 * Muestra el tablero por consola
 	 */
 
-	public void mostrar() {
+	public String mostrar() {
 		char ch1 = '*'; // caracter separador
+		String s = "";
 		for (int i = 0; i < DIMENX; i++) {
-			System.out.print("" + ch1 + ch1 + ch1 + ch1);
+			s += "" + ch1 + ch1 + ch1 + ch1;
 		}
-		System.out.println("" + ch1);
+		s += ch1 + "\n" + ch1;
 		for (int i = 0; i < DIMENX; i++) {
 			for (int j = 0; j < DIMENY; j++) {
 				if (!aciertos[i][j]) { // numeros restantes por acertar
-					System.out.print("" + ch1 + this.tablero[i][j] + ch1);
+					s += "" + ch1 + this.tablero[i][j] + ch1;
 					if (this.tablero[i][j] < 10) { // numeros de una cifra no descuadran
-						System.out.print("" + ch1);
+						s += "" + ch1;
 					}
 				} else { // numeros ya acertados tachados
-					System.out.print("" + ch1 + "xx" + ch1);
+					s += "" + ch1 + "xx" + ch1;
 				}
 
 			}
-			System.out.println("" + ch1);
+			s += "\n" + ch1;
 		}
 		for (int i = 0; i < DIMENX; i++) {
-			System.out.print("" + ch1 + ch1 + ch1 + ch1);
+			s += "" + ch1 + ch1 + ch1 + ch1;
 		}
-		System.out.println("" + ch1);
+		s += "\n";
+		return s;
 	}
 
 	/**
 	 * Actualiza bola tirada para el tablero y realiza comprobaciones
 	 */
 
-	public void actualizar(int bola) {
+	public String actualizar(int bola) {
 		int numero;
+		String s = "";
 		boolean haAcertado = false;
 		numero = bola; // tirar bola
-		System.out.println("Ha salido el numero: " + numero); // informar de la tirada
+		s += "\nHa salido el numero: " + numero; // informar de la tirada
 		for (int i = 0; i < DIMENX; i++) {
 			for (int j = 0; j < DIMENY; j++) {
 				if (numero == tablero[i][j]) {
@@ -99,14 +106,15 @@ public class Tablero {
 			}
 		}
 		if (haAcertado) { // informar del acierto
-			System.out.println("Felicidades, ha acertado el numero");
-			System.out.println("Ha sido tachado con xx");
+			s += "\nFelicidades, ha acertado el numero";
+			s += "\nHa sido tachado con xx";
 		}
 
 		comprobarTodo(); // comprobar lineas o bingo
-		contadorTiradas++;
-		System.out.println("tirada n" + contadorTiradas);
 
+		contadorTiradas++;
+		s += "\ntirada n" + contadorTiradas + "\n";
+		return s;
 	}
 
 	/**
@@ -127,21 +135,47 @@ public class Tablero {
 	 * Comprobar linea en las 2 dimensiones y bingo, informar en su caso
 	 */
 
-	public void comprobarTodo() {
-		boolean lineax, lineay, bingo;
-		lineax = comprobarLineaX();
-		lineay = comprobarLineaY();
+	public String comprobarTodo() {
+		boolean lineaX, lineaY, bingo;
+		String s = "";
+		lineaX = comprobarLineaX();
+		lineaY = comprobarLineaY();
 		bingo = comprobarBingo();
-		if (lineax) {
-			System.out.println("Ha sacado linea en horizontal! Felicidades!");
+		if (lineaX) {
+			s += "Ha sacado linea en horizontal! Felicidades!\n";
 		}
-		if (lineay) {
-			System.out.println("Ha sacado linea en vertical! Felicidades!");
+		if (lineaY) {
+			s += "Ha sacado linea en vertical! Felicidades!\n";
 		}
 		if (bingo) {
-			System.out.println("Ha sacado BINGO!! Felicidades!");
+			s += "Ha sacado BINGO!! Ha ganado\n";
 		}
+		return s;
+	}
 
+	/**
+	 * Comprueba el ganador de una partida y devuelve su nombre, si no, devuelve no
+	 * 
+	 * @return
+	 */
+
+	public String comprobarGanador() {
+		boolean esBingo;
+		String ganador = "no";
+		esBingo = comprobarBingo();
+		if (esBingo) {
+			ganador = this.nombre;
+		}
+		return ganador;
+	}
+
+	public String resolverApuestaGanador(int nJugadores) {
+		this.saldo += this.apuesta * nJugadores;
+		return this.nombre;
+	}
+
+	public void resolverApuestaPerdedor() {
+		this.saldo -= this.apuesta;
 	}
 
 	/**
@@ -213,10 +247,24 @@ public class Tablero {
 	}
 
 	/**
-	 * @return the id
+	 * @return the saldo
 	 */
-	public String getId() {
-		return id;
+	public double getSaldo() {
+		return saldo;
+	}
+
+	/**
+	 * @param saldo the saldo to set
+	 */
+	public void setSaldo(double saldo) {
+		this.saldo = saldo;
+	}
+
+	/**
+	 * @return the nombre
+	 */
+	public String getNombre() {
+		return nombre;
 	}
 
 }

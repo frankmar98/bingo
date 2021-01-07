@@ -11,8 +11,8 @@
 public class Principal {
 
 	public static void main(String[] args) {
-		Menus m = new Menus();
-		m.inicializar();
+		InterfazBingo1 interfaz = new InterfazBingo1();
+		interfaz.iniciarInterfaz();
 
 	}
 
